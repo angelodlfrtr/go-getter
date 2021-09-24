@@ -16,7 +16,6 @@ func Copy(ctx context.Context, dst io.Writer, src io.Reader) (int64, error) {
 	// Copy will call the Reader and Writer interface multiple time, in order
 	// to copy by chunk (avoiding loading the whole file in memory).
 	return io.Copy(dst, readerFunc(func(p []byte) (int, error) {
-
 		select {
 		case <-ctx.Done():
 			// context has been canceled

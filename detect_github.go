@@ -10,6 +10,7 @@ import (
 // them into URLs that the Git Getter can understand.
 type GitHubDetector struct{}
 
+// Detect github domain in src uri
 func (d *GitHubDetector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil

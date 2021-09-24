@@ -129,6 +129,7 @@ func untar(input io.Reader, dst, src string, dir bool, umask os.FileMode) error 
 // unpack tar files.
 type TarDecompressor struct{}
 
+// Decompress src into dst
 func (d *TarDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// If we're going into a directory we should make that first
 	mkdir := dst

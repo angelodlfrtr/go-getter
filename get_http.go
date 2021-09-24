@@ -16,7 +16,7 @@ import (
 	safetemp "github.com/hashicorp/go-safetemp"
 )
 
-// HttpGetter is a Getter implementation that will download from an HTTP
+// HTTPGetter is a Getter implementation that will download from an HTTP
 // endpoint.
 //
 // For file downloads, HTTP is used directly.
@@ -36,7 +36,7 @@ import (
 // The source URL, whether from the header or meta tag, must be a fully
 // formed URL. The shorthand syntax of "github.com/foo/bar" or relative
 // paths are not allowed.
-type HttpGetter struct {
+type HTTPGetter struct {
 	getter
 
 	// Netrc, if true, will lookup and use auth information found
@@ -54,14 +54,16 @@ type HttpGetter struct {
 	Header http.Header
 }
 
-func (g *HttpGetter) ClientMode(u *url.URL) (ClientMode, error) {
+// ClientMode returns http getter client mode for url u
+func (g *HTTPGetter) ClientMode(u *url.URL) (ClientMode, error) {
 	if strings.HasSuffix(u.Path, "/") {
 		return ClientModeDir, nil
 	}
 	return ClientModeFile, nil
 }
 
-func (g *HttpGetter) Get(dst string, u *url.URL) error {
+// Get u into dst
+func (g *HTTPGetter) Get(dst string, u *url.URL) error {
 	ctx := g.Context()
 	// Copy the URL so we can modify it
 	var newU url.URL = *u
@@ -143,7 +145,7 @@ func (g *HttpGetter) Get(dst string, u *url.URL) error {
 // older version of the destination file does not exist, else it will be either
 // falsely identified as being replaced, or corrupted with extra bytes
 // appended.
-func (g *HttpGetter) GetFile(dst string, src *url.URL) error {
+func (g *HTTPGetter) GetFile(dst string, src *url.URL) error {
 	ctx := g.Context()
 	if g.Netrc {
 		// Add auth from netrc if we can
@@ -244,7 +246,7 @@ func (g *HttpGetter) GetFile(dst string, src *url.URL) error {
 
 // getSubdir downloads the source into the destination, but with
 // the proper subdir.
-func (g *HttpGetter) getSubdir(ctx context.Context, dst, source, subDir string) error {
+func (g *HTTPGetter) getSubdir(ctx context.Context, dst, source, subDir string) error {
 	// Create a temporary directory to store the full source. This has to be
 	// a non-existent directory.
 	td, tdcloser, err := safetemp.Dir("", "getter")
@@ -289,7 +291,7 @@ func (g *HttpGetter) getSubdir(ctx context.Context, dst, source, subDir string) 
 
 // parseMeta looks for the first meta tag in the given reader that
 // will give us the source URL.
-func (g *HttpGetter) parseMeta(r io.Reader) (string, error) {
+func (g *HTTPGetter) parseMeta(r io.Reader) (string, error) {
 	d := xml.NewDecoder(r)
 	d.CharsetReader = charsetReader
 	d.Strict = false

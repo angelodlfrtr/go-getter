@@ -29,6 +29,7 @@ type ProgressBar struct {
 	pbs int
 }
 
+// ProgressBarConfig set progress bar configuration for given bar
 func ProgressBarConfig(bar *pb.ProgressBar, prefix string) {
 	bar.SetUnits(pb.U_BYTES)
 	bar.Prefix(prefix)

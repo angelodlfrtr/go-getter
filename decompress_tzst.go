@@ -2,15 +2,17 @@ package getter
 
 import (
 	"fmt"
-	"github.com/klauspost/compress/zstd"
 	"os"
 	"path/filepath"
+
+	"github.com/klauspost/compress/zstd"
 )
 
 // TarZstdDecompressor is an implementation of Decompressor that can
 // decompress tar.zstd files.
 type TarZstdDecompressor struct{}
 
+// Decompress src into dst
 func (d *TarZstdDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// If we're going into a directory we should make that first
 	mkdir := dst

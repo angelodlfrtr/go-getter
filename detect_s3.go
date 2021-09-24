@@ -10,6 +10,7 @@ import (
 // them into URLs that the S3 getter can understand.
 type S3Detector struct{}
 
+// Detect s3 scheme in src uri
 func (d *S3Detector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil

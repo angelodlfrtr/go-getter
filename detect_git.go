@@ -4,6 +4,7 @@ package getter
 // git@host.com:dir1/dir2 and converts them to proper URLs.
 type GitDetector struct{}
 
+// Detect git in src uri
 func (d *GitDetector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil

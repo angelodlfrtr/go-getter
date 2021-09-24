@@ -11,6 +11,7 @@ import (
 // decompress gzip files.
 type GzipDecompressor struct{}
 
+// Decompress src into dst
 func (d *GzipDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// Directory isn't supported at all
 	if dir {

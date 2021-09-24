@@ -4,6 +4,7 @@ package getter
 type ClientMode uint
 
 const (
+	// ClientModeInvalid define base client mode
 	ClientModeInvalid ClientMode = iota
 
 	// ClientModeAny downloads anything it can. In this mode, dst must

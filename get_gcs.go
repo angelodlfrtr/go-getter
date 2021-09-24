@@ -19,6 +19,7 @@ type GCSGetter struct {
 	getter
 }
 
+// ClientMode returns GCS getter client mode for given url u
 func (g *GCSGetter) ClientMode(u *url.URL) (ClientMode, error) {
 	ctx := g.Context()
 
@@ -56,6 +57,7 @@ func (g *GCSGetter) ClientMode(u *url.URL) (ClientMode, error) {
 	return ClientModeFile, nil
 }
 
+// Get u into dst
 func (g *GCSGetter) Get(dst string, u *url.URL) error {
 	ctx := g.Context()
 
@@ -115,6 +117,7 @@ func (g *GCSGetter) Get(dst string, u *url.URL) error {
 	return nil
 }
 
+// GetFile u into dst
 func (g *GCSGetter) GetFile(dst string, u *url.URL) error {
 	ctx := g.Context()
 
@@ -135,9 +138,9 @@ func (g *GCSGetter) getObject(ctx context.Context, client *storage.Client, dst, 
 	var rc *storage.Reader
 	var err error
 	if fragment != "" {
-		generation, err := strconv.ParseInt(fragment, 10, 64)
-		if err != nil {
-			return err
+		generation, parseErr := strconv.ParseInt(fragment, 10, 64)
+		if parseErr != nil {
+			return parseErr
 		}
 		rc, err = client.Bucket(bucket).Object(object).Generation(generation).NewReader(ctx)
 	} else {

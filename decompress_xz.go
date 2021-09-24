@@ -12,6 +12,7 @@ import (
 // decompress xz files.
 type XzDecompressor struct{}
 
+// Decompress src into dst
 func (d *XzDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// Directory isn't supported at all
 	if dir {

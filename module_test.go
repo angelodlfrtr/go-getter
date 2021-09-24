@@ -40,6 +40,7 @@ func testModule(n string) string {
 	}
 	return fmtFileURL(p)
 }
+
 func httpTestModule(n string) *httptest.Server {
 	p := filepath.Join(fixtureDir, n)
 	p, err := filepath.Abs(p)
@@ -73,9 +74,9 @@ func testURL(s string) *url.URL {
 	return u
 }
 
-func testStorage(t *testing.T) Storage {
-	return &FolderStorage{StorageDir: tempDir(t)}
-}
+// func testStorage(t *testing.T) Storage {
+// return &FolderStorage{StorageDir: tempDir(t)}
+// }
 
 func assertContents(t *testing.T, path string, contents string) {
 	data, err := ioutil.ReadFile(path)

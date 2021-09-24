@@ -12,6 +12,7 @@ import (
 // decompress tar.xz files.
 type TarXzDecompressor struct{}
 
+// Decompress src into dst
 func (d *TarXzDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// If we're going into a directory we should make that first
 	mkdir := dst

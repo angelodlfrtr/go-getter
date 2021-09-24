@@ -10,6 +10,7 @@ import (
 // them into URLs that the GCSGetter can understand.
 type GCSDetector struct{}
 
+// Detect GCS domain i src uri
 func (d *GCSDetector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil
@@ -23,7 +24,6 @@ func (d *GCSDetector) Detect(src, _ string) (string, bool, error) {
 }
 
 func (d *GCSDetector) detectHTTP(src string) (string, bool, error) {
-
 	parts := strings.Split(src, "/")
 	if len(parts) < 5 {
 		return "", false, fmt.Errorf(

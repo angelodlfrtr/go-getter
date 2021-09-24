@@ -1,4 +1,4 @@
-// getter is a package for downloading files or directories from a variety of
+// Package getter is a package for downloading files or directories from a variety of
 // protocols.
 //
 // getter is unique in its ability to download both directories and files.
@@ -60,7 +60,7 @@ var forcedRegexp = regexp.MustCompile(`^([A-Za-z0-9]+)::(.+)$`)
 var httpClient = cleanhttp.DefaultClient()
 
 func init() {
-	httpGetter := &HttpGetter{
+	httpGetter := &HTTPGetter{
 		Netrc: true,
 	}
 

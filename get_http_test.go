@@ -17,15 +17,15 @@ import (
 	"testing"
 )
 
-func TestHttpGetter_impl(t *testing.T) {
-	var _ Getter = new(HttpGetter)
+func TestHTTPGetter_impl(t *testing.T) {
+	var _ Getter = new(HTTPGetter)
 }
 
-func TestHttpGetter_header(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_header(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -46,11 +46,11 @@ func TestHttpGetter_header(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_requestHeader(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_requestHeader(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	g.Header = make(http.Header)
 	g.Header.Add("X-Foobar", "foobar")
 	dst := tempDir(t)
@@ -74,11 +74,11 @@ func TestHttpGetter_requestHeader(t *testing.T) {
 	assertContents(t, dst, "Hello\n")
 }
 
-func TestHttpGetter_meta(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_meta(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -99,11 +99,11 @@ func TestHttpGetter_meta(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_metaSubdir(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_metaSubdir(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -124,11 +124,11 @@ func TestHttpGetter_metaSubdir(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_metaSubdirGlob(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_metaSubdirGlob(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -149,11 +149,11 @@ func TestHttpGetter_metaSubdirGlob(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_none(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_none(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -168,8 +168,8 @@ func TestHttpGetter_none(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_resume(t *testing.T) {
-	load := []byte(testHttpMetaStr)
+func TestHTTPGetter_resume(t *testing.T) {
+	load := []byte(testHTTPMetaStr)
 	sha := sha256.New()
 	if n, err := sha.Write(load); n != len(load) || err != nil {
 		t.Fatalf("sha write failed: %d, %s", n, err)
@@ -177,7 +177,7 @@ func TestHttpGetter_resume(t *testing.T) {
 	checksum := hex.EncodeToString(sha.Sum(nil))
 	downloadFrom := len(load) / 2
 
-	ln := testHttpServer(t)
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
 	dst := tempDir(t)
@@ -224,8 +224,8 @@ func TestHttpGetter_resume(t *testing.T) {
 }
 
 // The server may support Byte-Range, but has no size for the requested object
-func TestHttpGetter_resumeNoRange(t *testing.T) {
-	load := []byte(testHttpMetaStr)
+func TestHTTPGetter_resumeNoRange(t *testing.T) {
+	load := []byte(testHTTPMetaStr)
 	sha := sha256.New()
 	if n, err := sha.Write(load); n != len(load) || err != nil {
 		t.Fatalf("sha write failed: %d, %s", n, err)
@@ -233,7 +233,7 @@ func TestHttpGetter_resumeNoRange(t *testing.T) {
 	checksum := hex.EncodeToString(sha.Sum(nil))
 	downloadFrom := len(load) / 2
 
-	ln := testHttpServer(t)
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
 	dst := tempDir(t)
@@ -274,11 +274,11 @@ func TestHttpGetter_resumeNoRange(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_file(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_file(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempTestFile(t)
 	defer os.RemoveAll(filepath.Dir(dst))
 
@@ -299,11 +299,11 @@ func TestHttpGetter_file(t *testing.T) {
 	assertContents(t, dst, "Hello\n")
 }
 
-// TestHttpGetter_http2server tests that http.Request is not reused
+// TestHTTPGetter_http2server tests that http.Request is not reused
 // between HEAD & GET, which would lead to race condition in HTTP/2.
 // This test is only meaningful for the race detector (go test -race).
-func TestHttpGetter_http2server(t *testing.T) {
-	g := new(HttpGetter)
+func TestHTTPGetter_http2server(t *testing.T) {
+	g := new(HTTPGetter)
 	src, err := url.Parse("https://releases.hashicorp.com/terraform/0.14.0/terraform_0.14.0_SHA256SUMS")
 	if err != nil {
 		t.Fatal(err)
@@ -316,11 +316,11 @@ func TestHttpGetter_http2server(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_auth(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_auth(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -342,11 +342,11 @@ func TestHttpGetter_auth(t *testing.T) {
 	}
 }
 
-func TestHttpGetter_authNetrc(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_authNetrc(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -356,7 +356,7 @@ func TestHttpGetter_authNetrc(t *testing.T) {
 	u.Path = "/meta"
 
 	// Write the netrc file
-	path, closer := tempFileContents(t, fmt.Sprintf(testHttpNetrc, ln.Addr().String()))
+	path, closer := tempFileContents(t, fmt.Sprintf(testHTTPNetrc, ln.Addr().String()))
 	defer closer()
 	defer tempEnv(t, "NETRC", path)()
 
@@ -380,8 +380,8 @@ func (errRoundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 }
 
 // verify that the default httpClient no longer comes from http.DefaultClient
-func TestHttpGetter_cleanhttp(t *testing.T) {
-	ln := testHttpServer(t)
+func TestHTTPGetter_cleanhttp(t *testing.T) {
+	ln := testHTTPServer(t)
 	defer ln.Close()
 
 	// break the default http client
@@ -390,7 +390,7 @@ func TestHttpGetter_cleanhttp(t *testing.T) {
 		http.DefaultClient.Transport = http.DefaultTransport
 	}()
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	dst := tempDir(t)
 	defer os.RemoveAll(dst)
 
@@ -405,11 +405,11 @@ func TestHttpGetter_cleanhttp(t *testing.T) {
 	}
 }
 
-func TestHttpGetter__RespectsContextCanceled(t *testing.T) {
+func TestHTTPGetter__RespectsContextCanceled(t *testing.T) {
 	ctx, cancel := context.WithCancel(context.Background())
 	cancel() // cancel immediately
 
-	ln := testHttpServer(t)
+	ln := testHTTPServer(t)
 
 	var u url.URL
 	u.Scheme = "http"
@@ -427,7 +427,7 @@ func TestHttpGetter__RespectsContextCanceled(t *testing.T) {
 		RoundTripper: http.DefaultTransport,
 	}
 
-	g := new(HttpGetter)
+	g := new(HTTPGetter)
 	g.client = &Client{
 		Ctx: ctx,
 	}
@@ -441,22 +441,22 @@ func TestHttpGetter__RespectsContextCanceled(t *testing.T) {
 	}
 }
 
-func testHttpServer(t *testing.T) net.Listener {
+func testHTTPServer(t *testing.T) net.Listener {
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/expect-header", testHttpHandlerExpectHeader)
-	mux.HandleFunc("/file", testHttpHandlerFile)
-	mux.HandleFunc("/header", testHttpHandlerHeader)
-	mux.HandleFunc("/meta", testHttpHandlerMeta)
-	mux.HandleFunc("/meta-auth", testHttpHandlerMetaAuth)
-	mux.HandleFunc("/meta-subdir", testHttpHandlerMetaSubdir)
-	mux.HandleFunc("/meta-subdir-glob", testHttpHandlerMetaSubdirGlob)
-	mux.HandleFunc("/range", testHttpHandlerRange)
-	mux.HandleFunc("/no-range", testHttpHandlerNoRange)
+	mux.HandleFunc("/expect-header", testHTTPHandlerExpectHeader)
+	mux.HandleFunc("/file", testHTTPHandlerFile)
+	mux.HandleFunc("/header", testHTTPHandlerHeader)
+	mux.HandleFunc("/meta", testHTTPHandlerMeta)
+	mux.HandleFunc("/meta-auth", testHTTPHandlerMetaAuth)
+	mux.HandleFunc("/meta-subdir", testHTTPHandlerMetaSubdir)
+	mux.HandleFunc("/meta-subdir-glob", testHTTPHandlerMetaSubdirGlob)
+	mux.HandleFunc("/range", testHTTPHandlerRange)
+	mux.HandleFunc("/no-range", testHTTPHandlerNoRange)
 
 	var server http.Server
 	server.Handler = mux
@@ -465,7 +465,7 @@ func testHttpServer(t *testing.T) net.Listener {
 	return ln
 }
 
-func testHttpHandlerExpectHeader(w http.ResponseWriter, r *http.Request) {
+func testHTTPHandlerExpectHeader(w http.ResponseWriter, r *http.Request) {
 	if expected, ok := r.URL.Query()["expected"]; ok {
 		if r.Header.Get(expected[0]) != "" {
 			w.Write([]byte("Hello\n"))
@@ -476,20 +476,20 @@ func testHttpHandlerExpectHeader(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(400)
 }
 
-func testHttpHandlerFile(w http.ResponseWriter, r *http.Request) {
+func testHTTPHandlerFile(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello\n"))
 }
 
-func testHttpHandlerHeader(w http.ResponseWriter, r *http.Request) {
+func testHTTPHandlerHeader(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("X-Terraform-Get", testModuleURL("basic").String())
 	w.WriteHeader(200)
 }
 
-func testHttpHandlerMeta(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(fmt.Sprintf(testHttpMetaStr, testModuleURL("basic").String())))
+func testHTTPHandlerMeta(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(fmt.Sprintf(testHTTPMetaStr, testModuleURL("basic").String())))
 }
 
-func testHttpHandlerMetaAuth(w http.ResponseWriter, r *http.Request) {
+func testHTTPHandlerMetaAuth(w http.ResponseWriter, r *http.Request) {
 	user, pass, ok := r.BasicAuth()
 	if !ok {
 		w.WriteHeader(401)
@@ -501,23 +501,23 @@ func testHttpHandlerMetaAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(fmt.Sprintf(testHttpMetaStr, testModuleURL("basic").String())))
+	w.Write([]byte(fmt.Sprintf(testHTTPMetaStr, testModuleURL("basic").String())))
 }
 
-func testHttpHandlerMetaSubdir(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(fmt.Sprintf(testHttpMetaStr, testModuleURL("basic//subdir").String())))
+func testHTTPHandlerMetaSubdir(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(fmt.Sprintf(testHTTPMetaStr, testModuleURL("basic//subdir").String())))
 }
 
-func testHttpHandlerMetaSubdirGlob(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(fmt.Sprintf(testHttpMetaStr, testModuleURL("basic//sub*").String())))
+func testHTTPHandlerMetaSubdirGlob(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(fmt.Sprintf(testHTTPMetaStr, testModuleURL("basic//sub*").String())))
 }
 
-func testHttpHandlerNone(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(testHttpNoneStr))
-}
+// func testHTTPHandlerNone(w http.ResponseWriter, r *http.Request) {
+// w.Write([]byte(testHTTPNoneStr))
+// }
 
-func testHttpHandlerRange(w http.ResponseWriter, r *http.Request) {
-	load := []byte(testHttpMetaStr)
+func testHTTPHandlerRange(w http.ResponseWriter, r *http.Request) {
+	load := []byte(testHTTPMetaStr)
 	switch r.Method {
 	case "HEAD":
 		w.Header().Add("accept-ranges", "bytes")
@@ -534,8 +534,8 @@ func testHttpHandlerRange(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func testHttpHandlerNoRange(w http.ResponseWriter, r *http.Request) {
-	load := []byte(testHttpMetaStr)
+func testHTTPHandlerNoRange(w http.ResponseWriter, r *http.Request) {
+	load := []byte(testHTTPMetaStr)
 	switch r.Method {
 	case "HEAD":
 		// we support range, but the object size isn't known
@@ -548,7 +548,7 @@ func testHttpHandlerNoRange(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const testHttpMetaStr = `
+const testHTTPMetaStr = `
 <html>
 <head>
 <meta name="terraform-get" content="%s">
@@ -556,14 +556,14 @@ const testHttpMetaStr = `
 </html>
 `
 
-const testHttpNoneStr = `
-<html>
-<head>
-</head>
-</html>
-`
+// const testHTTPNoneStr = `
+// <html>
+// <head>
+// </head>
+// </html>
+// `
 
-const testHttpNetrc = `
+const testHTTPNetrc = `
 machine %s
 login foo
 password bar

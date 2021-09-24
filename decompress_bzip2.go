@@ -11,6 +11,7 @@ import (
 // decompress bz2 files.
 type Bzip2Decompressor struct{}
 
+// Decompress src into dst
 func (d *Bzip2Decompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// Directory isn't supported at all
 	if dir {

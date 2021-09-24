@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 )
 
+// Get u in dst
 func (g *FileGetter) Get(dst string, u *url.URL) error {
 	path := u.Path
 	if u.RawPath != "" {
@@ -48,6 +49,7 @@ func (g *FileGetter) Get(dst string, u *url.URL) error {
 	return os.Symlink(path, dst)
 }
 
+// GetFile from the source u into dst
 func (g *FileGetter) GetFile(dst string, u *url.URL) error {
 	ctx := g.Context()
 	path := u.Path

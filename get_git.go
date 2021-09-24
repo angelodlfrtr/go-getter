@@ -28,10 +28,12 @@ type GitGetter struct {
 
 var defaultBranchRegexp = regexp.MustCompile(`\s->\sorigin/(.*)`)
 
+// ClientMode returns dir client mode
 func (g *GitGetter) ClientMode(_ *url.URL) (ClientMode, error) {
 	return ClientModeDir, nil
 }
 
+// Get u into dst
 func (g *GitGetter) Get(dst string, u *url.URL) error {
 	ctx := g.Context()
 	if _, err := exec.LookPath("git"); err != nil {
@@ -67,7 +69,7 @@ func (g *GitGetter) Get(dst string, u *url.URL) error {
 		q.Del("depth")
 
 		// Copy the URL
-		var newU url.URL = *u
+		newU := *u
 		u = &newU
 		u.RawQuery = q.Encode()
 	}
@@ -76,7 +78,7 @@ func (g *GitGetter) Get(dst string, u *url.URL) error {
 	if sshKey != "" {
 		// Check that the git version is sufficiently new.
 		if err := checkGitVersion("2.3"); err != nil {
-			return fmt.Errorf("Error using ssh key: %v", err)
+			return fmt.Errorf("error using ssh key: %v", err)
 		}
 
 		// We have an SSH key - decode it.
@@ -288,7 +290,7 @@ func checkGitVersion(min string) error {
 
 	fields := strings.Fields(string(out))
 	if len(fields) < 3 {
-		return fmt.Errorf("Unexpected 'git version' output: %q", string(out))
+		return fmt.Errorf("unexpected 'git version' output: %q", string(out))
 	}
 	v := fields[2]
 	if runtime.GOOS == "windows" && strings.Contains(v, ".windows.") {
@@ -306,7 +308,7 @@ func checkGitVersion(min string) error {
 	}
 
 	if have.LessThan(want) {
-		return fmt.Errorf("Required git version = %s, have %s", want, have)
+		return fmt.Errorf("required git version = %s, have %s", want, have)
 	}
 
 	return nil

@@ -34,9 +34,9 @@ func copyDir(ctx context.Context, dst string, src string, ignoreDot bool, umask 
 			// Skip any dot files
 			if info.IsDir() {
 				return filepath.SkipDir
-			} else {
-				return nil
 			}
+
+			return nil
 		}
 
 		// The "path" has the src prefixed to it. We need to join our

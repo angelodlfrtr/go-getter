@@ -12,6 +12,7 @@ import (
 // them into URLs that the Git or Hg Getter can understand.
 type BitBucketDetector struct{}
 
+// Detect BitBucket domain in src uri
 func (d *BitBucketDetector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil
@@ -35,8 +36,8 @@ func (d *BitBucketDetector) detectHTTP(src string) (string, bool, error) {
 	var info struct {
 		SCM string `json:"scm"`
 	}
-	infoUrl := "https://api.bitbucket.org/2.0/repositories" + u.Path
-	resp, err := http.Get(infoUrl)
+	infoURL := "https://api.bitbucket.org/2.0/repositories" + u.Path
+	resp, err := http.Get(infoURL)
 	if err != nil {
 		return "", true, fmt.Errorf("error looking up BitBucket URL: %s", err)
 	}

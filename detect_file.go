@@ -10,6 +10,7 @@ import (
 // FileDetector implements Detector to detect file paths.
 type FileDetector struct{}
 
+// Detect file scheme on src uri with given root pwd
 func (d *FileDetector) Detect(src, pwd string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil

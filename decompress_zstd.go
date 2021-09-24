@@ -2,15 +2,17 @@ package getter
 
 import (
 	"fmt"
-	"github.com/klauspost/compress/zstd"
 	"os"
 	"path/filepath"
+
+	"github.com/klauspost/compress/zstd"
 )
 
 // ZstdDecompressor is an implementation of Decompressor that
 // can decompress .zst files.
 type ZstdDecompressor struct{}
 
+// Decompress src into dst
 func (d *ZstdDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	if dir {
 		return fmt.Errorf("zstd-compressed files can only unarchive to a single file")

@@ -19,10 +19,12 @@ type HgGetter struct {
 	getter
 }
 
+// ClientMode return client mode dir
 func (g *HgGetter) ClientMode(_ *url.URL) (ClientMode, error) {
 	return ClientModeDir, nil
 }
 
+// Get u into dst
 func (g *HgGetter) Get(dst string, u *url.URL) error {
 	ctx := g.Context()
 	if _, err := exec.LookPath("hg"); err != nil {

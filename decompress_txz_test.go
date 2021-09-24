@@ -6,7 +6,6 @@ import (
 )
 
 func TestTarXzDecompressor(t *testing.T) {
-
 	multiplePaths := []string{"dir/", "dir/test2", "test1"}
 	orderingPaths := []string{"workers/", "workers/mq/", "workers/mq/__init__.py"}
 

@@ -127,7 +127,6 @@ func TestGCSGetter_GetGenerationFile(t *testing.T) {
 	if string(content) != "b\n" {
 		t.Fatalf("expected file contents from generation to be `b` but got `%s`", content)
 	}
-
 }
 
 func TestGCSGetter_GetFile_notfound(t *testing.T) {
@@ -195,7 +194,7 @@ func TestGCSGetter_ClientMode_notfound(t *testing.T) {
 func TestGCSGetter_Url(t *testing.T) {
 	defer initGCPCredentials(t)()
 
-	var gcstests = []struct {
+	gcstests := []struct {
 		name   string
 		url    string
 		bucket string
@@ -214,7 +213,6 @@ func TestGCSGetter_Url(t *testing.T) {
 			g := new(GCSGetter)
 			forced, src := getForcedGetter(pt.url)
 			u, err := url.Parse(src)
-
 			if err != nil {
 				t.Errorf("test %d: unexpected error: %s", i, err)
 			}
@@ -223,7 +221,6 @@ func TestGCSGetter_Url(t *testing.T) {
 			}
 
 			bucket, path, _, err := g.parseURL(u)
-
 			if err != nil {
 				t.Fatalf("err: %s", err)
 			}

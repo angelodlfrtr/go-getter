@@ -23,6 +23,7 @@ type MockGetter struct {
 	GetFileErr    error
 }
 
+// Get u into dst
 func (g *MockGetter) Get(dst string, u *url.URL) error {
 	g.GetCalled = true
 	g.GetDst = dst
@@ -35,6 +36,7 @@ func (g *MockGetter) Get(dst string, u *url.URL) error {
 	return g.GetErr
 }
 
+// GetFile u into dst
 func (g *MockGetter) GetFile(dst string, u *url.URL) error {
 	g.GetFileCalled = true
 	g.GetFileDst = dst
@@ -46,6 +48,7 @@ func (g *MockGetter) GetFile(dst string, u *url.URL) error {
 	return g.GetFileErr
 }
 
+// ClientMode returns client mode for given url u
 func (g *MockGetter) ClientMode(u *url.URL) (ClientMode, error) {
 	if l := len(u.Path); l > 0 && u.Path[l-1:] == "/" {
 		return ClientModeDir, nil

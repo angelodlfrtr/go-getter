@@ -11,6 +11,7 @@ import (
 // decompress tar.gzip files.
 type TarGzipDecompressor struct{}
 
+// Decompress src into dst
 func (d *TarGzipDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// If we're going into a directory we should make that first
 	mkdir := dst

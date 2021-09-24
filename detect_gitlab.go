@@ -10,6 +10,7 @@ import (
 // them into URLs that the Git Getter can understand.
 type GitLabDetector struct{}
 
+// Detect gitlab domain in src uri
 func (d *GitLabDetector) Detect(src, _ string) (string, bool, error) {
 	if len(src) == 0 {
 		return "", false, nil
@@ -30,18 +31,18 @@ func (d *GitLabDetector) detectHTTP(src string) (string, bool, error) {
 	}
 
 	urlStr := fmt.Sprintf("https://%s", strings.Join(parts[:3], "/"))
-	repoUrl, err := url.Parse(urlStr)
+	repoURL, err := url.Parse(urlStr)
 	if err != nil {
 		return "", true, fmt.Errorf("error parsing GitLab URL: %s", err)
 	}
 
-	if !strings.HasSuffix(repoUrl.Path, ".git") {
-		repoUrl.Path += ".git"
+	if !strings.HasSuffix(repoURL.Path, ".git") {
+		repoURL.Path += ".git"
 	}
 
 	if len(parts) > 3 {
-		repoUrl.Path += "//" + strings.Join(parts[3:], "/")
+		repoURL.Path += "//" + strings.Join(parts[3:], "/")
 	}
 
-	return "git::" + repoUrl.String(), true, nil
+	return "git::" + repoURL.String(), true, nil
 }

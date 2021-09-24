@@ -16,6 +16,7 @@ type FileGetter struct {
 	Copy bool
 }
 
+// ClientMode returns FileGetter ClientMode for given url u
 func (g *FileGetter) ClientMode(u *url.URL) (ClientMode, error) {
 	path := u.Path
 	if u.RawPath != "" {

@@ -11,6 +11,7 @@ import (
 // decompress zip files.
 type ZipDecompressor struct{}
 
+// Decompress src into dst
 func (d *ZipDecompressor) Decompress(dst, src string, dir bool, umask os.FileMode) error {
 	// If we're going into a directory we should make that first
 	mkdir := dst

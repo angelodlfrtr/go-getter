@@ -173,7 +173,7 @@ func TestS3Getter_ClientMode_collision(t *testing.T) {
 }
 
 func TestS3Getter_Url(t *testing.T) {
-	var s3tests = []struct {
+	s3tests := []struct {
 		name    string
 		url     string
 		region  string
@@ -236,7 +236,6 @@ func TestS3Getter_Url(t *testing.T) {
 			g := new(S3Getter)
 			forced, src := getForcedGetter(pt.url)
 			u, err := url.Parse(src)
-
 			if err != nil {
 				t.Errorf("test %d: unexpected error: %s", i, err)
 			}
@@ -244,8 +243,7 @@ func TestS3Getter_Url(t *testing.T) {
 				t.Fatalf("expected forced protocol to be s3")
 			}
 
-			region, bucket, path, version, creds, err := g.parseUrl(u)
-
+			region, bucket, path, version, creds, err := g.parseURL(u)
 			if err != nil {
 				t.Fatalf("err: %s", err)
 			}
@@ -261,7 +259,7 @@ func TestS3Getter_Url(t *testing.T) {
 			if version != pt.version {
 				t.Fatalf("expected %s, got %s", pt.version, version)
 			}
-			if &creds == nil {
+			if creds == nil {
 				t.Fatalf("expected to not be nil")
 			}
 		})
